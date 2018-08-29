@@ -76,9 +76,71 @@ class Board:
                     light_disks += 1
         return {Disk.DARK: dark_disks, Disk.LIGHT: light_disks}
 
+    def corners(self):
+        """:returns dictionary of disk color and how many corners does it occupy"""
+        N = len(self.data)
+        dark_corners, light_corners = 0, 0
+        for i in range(0, N, N-1):
+            for j in range(0, N, N - 1):
+                if self.data[i][j] == Disk.DARK:
+                    dark_corners += 1
+                elif self.data[i][j] == Disk.LIGHT:
+                    light_corners += 1
+        return {Disk.DARK: dark_corners, Disk.LIGHT: light_corners}
+
+    def edges(self):
+        """:returns dictionary of disk color and how many disks are on the edges"""
+        N = len(self.data)
+        dark_disks, light_disks = 0, 0
+
+        for i in range(N):#upper edge
+                if self.data[0][i] == Disk.DARK:
+                    dark_disks += 1
+                elif self.data[0][i] == Disk.LIGHT:
+                    light_disks += 1
+
+        for i in range(N):#bottom edge
+            if self.data[N - 1][i] == Disk.DARK:
+                dark_disks += 1
+            elif self.data[N - 1][i] == Disk.LIGHT:
+                light_disks += 1
+
+        for i in range(N):#right edge
+            if self.data[i][N -1 ] == Disk.DARK:
+                dark_disks += 1
+            elif self.data[i][N - 1] == Disk.LIGHT:
+                light_disks += 1
+
+        for i in range(N):#left edge
+            if self.data[i][0] == Disk.DARK:
+                dark_disks += 1
+            elif self.data[i][0] == Disk.LIGHT:
+                light_disks += 1
+        return {Disk.DARK: dark_disks, Disk.LIGHT: light_disks}
+
+    def stable_disks(self):
+        """
+        :returns dictionary of disk color and how many of them are stable
+        stable disk : cannot be flipped by opponent
+        """
+        dark_stable_disks, light_stable_disks = 0, 0
+        return {Disk.DARK: dark_stable_disks, Disk.LIGHT: light_stable_disks}
+
+    def vulnerable_disks(self):
+        """
+        :returns dictionary of disk color and how many of them are stable
+        semi-stable disk : can be flipped by opponent in the next move
+        """
+
+        dark_vulnerable_disks, light_vulnerable_disks = 0, 0
+        return {Disk.DARK: dark_vulnerable_disks, Disk.LIGHT: light_vulnerable_disks}
+
 if __name__ == '__main__':
     b = Board(8)
     print(b.data[0][5])
-    b.data[0][5] = -1
-    print(b.data[0][5])
-    print(b.data[1][5])
+    b.change_cel((0,0), Disk.DARK)
+    b.change_cel((7,0), Disk.DARK)
+    b.change_cel((0,7), Disk.DARK)
+    b.change_cel((7,7), Disk.DARK)
+    corners = b.corners()
+    print(corners[Disk.DARK])
